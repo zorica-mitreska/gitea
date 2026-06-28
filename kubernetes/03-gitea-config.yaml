@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitea-config
+  namespace: gitea
+data:
+  GITEA__database__DB_TYPE: "postgres"
+  GITEA__database__HOST: "postgres:5432"
+  GITEA__database__NAME: "gitea"
+  GITEA__database__USER: "gitea"
+  GITEA__server__DOMAIN: "gitea.local"
+  GITEA__server__ROOT_URL: "http://gitea.local/"
+  GITEA__server__HTTP_PORT: "3000"
+  GITEA__server__SSH_PORT: "22"
+  GITEA__cache__ADAPTER: "redis"
+  GITEA__cache__HOST: "redis://redis:6379/0"
+  GITEA__session__PROVIDER: "redis"
+  GITEA__session__PROVIDER_CONFIG: "redis://redis:6379/1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitea-secret
+  namespace: gitea
+type: Opaque
+data:
+  # "gitea_password" -> base64
+  GITEA__database__PASSWD: Z2l0ZWFfcGFzc3dvcmQ=
+  # "changeme_secret_key_32chars!!!!" -> base64
+  GITEA__security__SECRET_KEY: Y2hhbmdlbWVfc2VjcmV0X2tleV8zMmNoYXJzISEhIQ==
+  # "internal_token_value" -> base64
+  GITEA__security__INTERNAL_TOKEN: aW50ZXJuYWxfdG9rZW5fdmFsdWU=

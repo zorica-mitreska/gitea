@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: gitea
+data:
+  POSTGRES_DB: "gitea"
+  POSTGRES_USER: "gitea"
+  PGDATA: "/var/lib/postgresql/data/pgdata"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: gitea
+type: Opaque
+data:
+  # "gitea_password" -> base64
+  POSTGRES_PASSWORD: Z2l0ZWFfcGFzc3dvcmQ=

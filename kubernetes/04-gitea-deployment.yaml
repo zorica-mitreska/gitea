@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea
+  namespace: gitea
+  labels:
+    app: gitea
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitea
+  template:
+    metadata:
+      labels:
+        app: gitea
+    spec:
+      initContainers:
+        # Чека PostgreSQL да биде подготвен пред да стартува Gitea
+        - name: wait-for-postgres
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z postgres 5432; do
+                echo "Чекам PostgreSQL...";
+                sleep 3;
+              done;
+              echo "PostgreSQL е подготвен!"
+      containers:
+        - name: gitea
+          image: zmitreska/gitea:latest
+          ports:
+            - name: web
+              containerPort: 3000
+            - name: ssh
+              containerPort: 22
+          envFrom:
+            - configMapRef:
+                name: gitea-config
+            - secretRef:
+                name: gitea-secret
+          volumeMounts:
+            - name: gitea-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /api/healthz
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /api/healthz
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+      volumes:
+        - name: gitea-data
+          emptyDir: {}   # За продукција користи PersistentVolumeClaim
