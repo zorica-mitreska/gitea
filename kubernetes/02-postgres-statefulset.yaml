@@ -11,7 +11,7 @@ spec:
   ports:
     - port: 5432
       targetPort: 5432
-  clusterIP: None   # Headless service — потребен за StatefulSet DNS
+  clusterIP: None   
 ---
 apiVersion: apps/v1
 kind: StatefulSet

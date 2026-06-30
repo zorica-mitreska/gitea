@@ -16,7 +16,6 @@ spec:
         app: gitea
     spec:
       initContainers:
-        # Чека PostgreSQL да биде подготвен пред да стартува Gitea
         - name: wait-for-postgres
           image: busybox:1.35
           command:
@@ -67,4 +66,4 @@ spec:
               memory: "512Mi"
       volumes:
         - name: gitea-data
-          emptyDir: {}   # За продукција користи PersistentVolumeClaim
+          emptyDir: {}   

@@ -4,10 +4,7 @@ metadata:
   name: gitea-ingress
   namespace: gitea
   annotations:
-    # k3d/Traefik Ingress Controller
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    # Ако користиш nginx-ingress наместо Traefik, откоментирај:
-    # kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
     - host: gitea.local

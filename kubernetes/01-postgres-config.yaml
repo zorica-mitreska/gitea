@@ -15,5 +15,4 @@ metadata:
   namespace: gitea
 type: Opaque
 data:
-  # "gitea_password" -> base64
   POSTGRES_PASSWORD: Z2l0ZWFfcGFzc3dvcmQ=
