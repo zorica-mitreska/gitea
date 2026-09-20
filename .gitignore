@@ -122,3 +122,6 @@ prime/
 Makefile.local
 
 .env
+
+.env
+kubeconfig.yaml
